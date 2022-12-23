@@ -1,13 +1,16 @@
+import { Route } from "pages";
 import { FC, useState } from "react";
+import { useNavigate } from "react-router";
 import { Button, Input } from "shared";
 
 import s from "./style.module.scss";
 
 const Home: FC = () => {
 	const [inputValue, setInputValue] = useState("");
+	const navigate = useNavigate();
 
 	const startBiddingHandler = () => {
-		console.log("Started bidding");
+		navigate(Route.BIDDING + `/${`f${(+new Date()).toString(16)}`}`);
 	};
 
 	return (
