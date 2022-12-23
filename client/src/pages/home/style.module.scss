@@ -1,0 +1,33 @@
+.home {
+	padding-top: 2em;
+	&__container {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+	}
+
+	&__title {
+		font-size: 2rem;
+		line-height: 2.1em;
+		font-weight: 800;
+
+		text-align: center;
+
+		text-shadow: 5px 1px 4px black;
+	}
+
+	&__buttons {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		flex-wrap: wrap;
+		column-gap: 1em;
+		row-gap: 1em;
+	}
+
+	&__input {
+		max-width: 15em;
+		margin-bottom: 1em;
+	}
+}
