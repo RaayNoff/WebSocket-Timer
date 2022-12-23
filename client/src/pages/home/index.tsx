@@ -10,7 +10,7 @@ const Home: FC = () => {
 	const navigate = useNavigate();
 
 	const startBiddingHandler = () => {
-		navigate(Route.BIDDING + `/${`f${(+new Date()).toString(16)}`}`);
+		navigate(Route.BIDDING + `/${`${(+new Date()).toString(16)}`}`);
 	};
 
 	return (

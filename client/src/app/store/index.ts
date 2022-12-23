@@ -1,7 +1,7 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import { biddingSlice } from "pages/home/model";
+import { biddingSlice } from "pages/bidding";
 
-const rootReducer = combineReducers({
+export const rootReducer = combineReducers({
 	bidding: biddingSlice.reducer,
 });
 
