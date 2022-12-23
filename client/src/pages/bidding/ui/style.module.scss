@@ -1,0 +1,30 @@
+.bidding {
+	&__container {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+	}
+
+	&__info {
+		width: 100%;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+
+		font-size: 2rem;
+		line-height: 2.1em;
+		font-weight: 800;
+	}
+
+	&__title {
+		span {
+			color: #778899;
+		}
+	}
+	&__id {
+		span {
+			color: #5495e8;
+		}
+	}
+}
