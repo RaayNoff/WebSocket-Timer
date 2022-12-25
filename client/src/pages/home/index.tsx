@@ -1,16 +1,27 @@
 import { Route } from "pages";
+import { useBiddingActions } from "entities/bidding";
+import { Button, Input } from "shared";
+
 import { FC, useState } from "react";
 import { useNavigate } from "react-router";
-import { Button, Input } from "shared";
+
+import { getRandomRoom } from "./lib";
 
 import s from "./style.module.scss";
 
 const Home: FC = () => {
 	const [inputValue, setInputValue] = useState("");
 	const navigate = useNavigate();
+	const { setIsCreated, setWillBeCreated } = useBiddingActions();
 
 	const startBiddingHandler = () => {
-		navigate(Route.BIDDING + `/${`${(+new Date()).toString(16)}`}`);
+		navigate(Route.BIDDING + `/${getRandomRoom()}`);
+	};
+
+	const enterBiddingHandler = () => {
+		setIsCreated(true);
+		setWillBeCreated(false);
+		navigate(Route.BIDDING + `/${inputValue}`);
 	};
 
 	return (
@@ -26,7 +37,7 @@ const Home: FC = () => {
 					/>
 					<section className={s.home__buttons}>
 						<Button callback={startBiddingHandler}>Start bidding</Button>
-						<Button>Enter bidding</Button>
+						<Button callback={enterBiddingHandler}>Enter bidding</Button>
 					</section>
 				</div>
 			</div>

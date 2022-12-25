@@ -28,3 +28,14 @@
 		}
 	}
 }
+
+.clients {
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	&__item {
+		width: 20%;
+	}
+}

@@ -1,0 +1,41 @@
+.client {
+	width: 100%;
+	min-height: 50px;
+
+	font-size: 1.2rem;
+	line-height: 1.2em;
+	font-weight: 600;
+	text-align: center;
+
+	padding: 0.3em 1em;
+	border: 1px solid #5495e8;
+	background-color: rgba(#5495e8, 0.09);
+	border-radius: 1em;
+
+	&_active {
+		border: 1px solid green;
+		background-color: rgba(green, 0.09);
+	}
+
+	&__header {
+		position: relative;
+		color: #778899;
+
+		span {
+			color: #5495e8;
+			font-size: 1.2em;
+
+			&::before {
+				content: "№ ";
+			}
+		}
+	}
+
+	&__main {
+		text-transform: uppercase;
+	}
+
+	&__footer {
+		color: #5495e8;
+	}
+}
