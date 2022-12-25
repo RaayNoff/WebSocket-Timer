@@ -1,5 +1,5 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import { biddingSlice } from "pages/bidding";
+import { biddingSlice } from "entities/bidding";
 
 export const rootReducer = combineReducers({
 	bidding: biddingSlice.reducer,

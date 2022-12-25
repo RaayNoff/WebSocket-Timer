@@ -1,0 +1,1 @@
+export { getBiddingIDFromLocation } from "./helpers";
