@@ -9,7 +9,7 @@ class WSStore {
 	constructor() {
 		this.rooms = [];
 		this.intervals = [];
-		this.timerInSeconds = 20;
+		this.timerInSeconds = 120;
 	}
 
 	getRoomIndex(roomID) {
