@@ -7,6 +7,7 @@ class Config {
 		this.app = express();
 		this.expressWs = WSExpress(this.app);
 		this.aWss = this.expressWs.getWss();
+
 		this.app.use(cors({}));
 	}
 }
