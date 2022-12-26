@@ -9,6 +9,7 @@ class WSStore {
 	constructor() {
 		this.rooms = [];
 		this.intervals = [];
+		this.timerInSeconds = 20;
 	}
 
 	getRoomIndex(roomID) {
@@ -16,7 +17,10 @@ class WSStore {
 	}
 
 	getTimerCount(roomID) {
-		return this.rooms.filter((r) => r.id === roomID)[0].timer.count || 120;
+		return (
+			this.rooms.filter((r) => r.id === roomID)[0].timer.count ||
+			this.timerInSeconds
+		);
 	}
 
 	getTimer(roomID) {
@@ -27,9 +31,11 @@ class WSStore {
 		const firstClient = this.rooms.filter((room) => room.id === roomID)[0]
 			.clients[0];
 
+		const count = this.timerInSeconds;
+
 		const timer = {
 			id: roomID,
-			count: 120,
+			count,
 			currentClient: firstClient,
 		};
 
@@ -37,7 +43,8 @@ class WSStore {
 			const roomIndex = this.getRoomIndex(roomID);
 
 			const timerCount = this.getTimerCount(roomID);
-			if (timerCount === 0) {
+
+			if (timerCount <= 1) {
 				this.setNextClientToTimer(roomID);
 			} else {
 				this.rooms[roomIndex].timer.count = timerCount - 1;
@@ -55,11 +62,9 @@ class WSStore {
 	setNextClientToTimer(roomID) {
 		const roomIndex = this.getRoomIndex(roomID);
 
-		this.rooms[roomIndex].timer.count = 120;
+		this.rooms[roomIndex].timer.count = this.timerInSeconds;
 
 		const currentClient = this.rooms[roomIndex].timer.currentClient;
-
-		console.log("Clients: ", this.rooms[roomIndex].clients);
 
 		const currentClientIndex = this.rooms[roomIndex].clients.findIndex(
 			(cl) => cl === currentClient,
@@ -68,13 +73,16 @@ class WSStore {
 		const nextClientIndex = currentClientIndex + 1;
 		let nextClient = "";
 
-		if (nextClientIndex > this.rooms[roomIndex].clients.length - 1) {
+		const isNextIndexOutOfClients =
+			nextClientIndex > this.rooms[roomIndex].clients.length - 1;
+
+		if (isNextIndexOutOfClients) {
 			nextClient = this.rooms[roomIndex].clients[0];
 		} else {
 			nextClient = this.rooms[roomIndex].clients[nextClientIndex];
 		}
 
-		this.rooms[roomIndex].currentClient = nextClient;
+		this.rooms[roomIndex].timer.currentClient = nextClient;
 	}
 }
 

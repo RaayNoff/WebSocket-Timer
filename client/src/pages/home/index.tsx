@@ -12,7 +12,7 @@ import s from "./style.module.scss";
 const Home: FC = () => {
 	const [inputValue, setInputValue] = useState("");
 	const navigate = useNavigate();
-	const { setIsCreated, setWillBeCreated } = useBiddingActions();
+	const { setIsCreated, setwillConnect } = useBiddingActions();
 
 	const startBiddingHandler = () => {
 		navigate(Route.BIDDING + `/${getRandomRoom()}`);
@@ -20,7 +20,7 @@ const Home: FC = () => {
 
 	const enterBiddingHandler = () => {
 		setIsCreated(true);
-		setWillBeCreated(false);
+		setwillConnect(true);
 		navigate(Route.BIDDING + `/${inputValue}`);
 	};
 

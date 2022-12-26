@@ -6,8 +6,9 @@ interface IBiddingState {
 	currentRoomID: string | null;
 	clientID: string | null;
 	clientsList: string[];
-	willBeCreated: boolean;
+	willConnect: boolean;
 	timer: Timer | null;
+	webSocket: WebSocket | null;
 }
 
 const initialState: IBiddingState = {
@@ -16,8 +17,9 @@ const initialState: IBiddingState = {
 	currentRoomID: null,
 	clientID: null,
 	clientsList: [],
-	willBeCreated: true,
+	willConnect: false,
 	timer: null,
+	webSocket: null,
 };
 
 export const biddingSlice = createSlice({
@@ -37,11 +39,23 @@ export const biddingSlice = createSlice({
 		setError: (state, action: PayloadAction<string>) => {
 			state.error = action.payload;
 		},
-		setWillBeCreated: (state, action: PayloadAction<boolean>) => {
-			state.willBeCreated = action.payload;
+		setwillConnect: (state, action: PayloadAction<boolean>) => {
+			state.willConnect = action.payload;
 		},
 		setTimer: (state, action: PayloadAction<Timer>) => {
 			state.timer = action.payload;
+		},
+		setWebSocket: (state, action: PayloadAction<WebSocket>) => {
+			state.webSocket = action.payload;
+		},
+		resetState: (state) => {
+			state.clientID = null;
+			state.clientsList = [];
+			state.currentRoomID = null;
+			state.error = null;
+			state.isCreated = false;
+			state.timer = null;
+			state.willConnect = false;
 		},
 	},
 });

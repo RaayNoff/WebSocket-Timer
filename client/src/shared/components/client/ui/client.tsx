@@ -4,18 +4,18 @@ import { FC, memo } from "react";
 import s from "./style.module.scss";
 
 interface IClientProps {
-	timerCount?: number;
+	isCurrent?: boolean;
 	index?: number;
 	data: string;
 	className?: string;
 }
 
 const Client: FC<IClientProps> = memo(
-	({ timerCount, index, data, className }) => {
+	({ isCurrent, index, data, className }) => {
 		return (
 			<>
 				<article
-					className={clsx(s.client, timerCount && s.client_active, className)}
+					className={clsx(s.client, isCurrent && s.client_active, className)}
 				>
 					<header className={s.client__header}>
 						Participant <span>{index}</span>

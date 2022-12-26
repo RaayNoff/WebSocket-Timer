@@ -24,7 +24,6 @@ declare type WSMessageType =
 
 declare type WSStartedBiddingMessage = {
 	message: WSMessageType;
-	isCreated: boolean;
 	roomID: string;
 	clients: string[];
 	timer: Timer;

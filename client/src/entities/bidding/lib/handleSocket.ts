@@ -15,17 +15,17 @@ export const handleSocket = (
 			} as WSMessage),
 		);
 
-		if (!isConnect) {
+		if (isConnect) {
 			ws.send(
 				JSON.stringify({
-					method: "start-bidding",
+					method: "enter-bidding",
 					roomID,
 				} as WSMessage),
 			);
 		} else {
 			ws.send(
 				JSON.stringify({
-					method: "enter-bidding",
+					method: "start-bidding",
 					roomID,
 				} as WSMessage),
 			);
@@ -50,23 +50,23 @@ export const handleSocket = (
 
 			console.log(`Server assigned an ID: ${clientID}`);
 			dispatch(biddingSlice.actions.setClientID(clientID));
+			dispatch(biddingSlice.actions.setWebSocket(ws));
 		}
 
 		if (messageType === "error") {
 			const { content: errorMsg } = data as WSErrorMessage;
+			if (interval) clearInterval(interval);
 
 			console.error(errorMsg);
 			dispatch(biddingSlice.actions.setError(errorMsg));
 		}
 
 		if (messageType === "started-bidding") {
-			const { roomID, clients, isCreated, timer } =
-				data as WSStartedBiddingMessage;
+			const { roomID, clients, timer } = data as WSStartedBiddingMessage;
 
 			console.log("Room registred by ID: ", roomID);
-			console.log("Room created status: ", isCreated);
 			console.log("Clients: ", clients);
-			dispatch(biddingSlice.actions.setIsCreated(isCreated));
+			dispatch(biddingSlice.actions.setIsCreated(true));
 			dispatch(biddingSlice.actions.setClientsList(clients));
 			dispatch(biddingSlice.actions.setTimer(timer));
 		}
@@ -79,6 +79,7 @@ export const handleSocket = (
 
 			dispatch(biddingSlice.actions.setClientsList(clients));
 			dispatch(biddingSlice.actions.setTimer(timer));
+			dispatch(biddingSlice.actions.setwillConnect(false));
 		}
 
 		if (messageType === "update-clients") {
@@ -99,5 +100,7 @@ export const handleSocket = (
 
 	ws.onclose = (e) => {
 		if (interval) clearInterval(interval);
+
+		console.log("Server has closed connection");
 	};
 };

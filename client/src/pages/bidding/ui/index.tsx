@@ -1,25 +1,35 @@
 import { FC } from "react";
+import { useNavigate } from "react-router";
+import { Route } from "pages";
 
 import { Participant } from "entities/Participant";
 import { useBiddingActions } from "entities/bidding";
 import { Button, Error, useTypedSelector } from "shared";
 
-import { getBiddingIDFromLocation } from "../lib";
+import { closeSocket, getBiddingIDFromLocation } from "../lib";
 
 import s from "./style.module.scss";
 
 const Bidding: FC = () => {
-	const { openSocket } = useBiddingActions();
+	const { openSocket, resetState } = useBiddingActions();
+	const navigate = useNavigate();
 
-	const { isCreated, clientsList, error, willBeCreated, timer } =
+	const { isCreated, clientsList, error, timer, willConnect, webSocket } =
 		useTypedSelector((state) => state.bidding);
 
 	const startBiddingHandler = () => {
-		openSocket(getBiddingIDFromLocation(window.location));
+		openSocket(getBiddingIDFromLocation(window.location), false);
 	};
 
 	const enterBiddingHandler = () => {
 		openSocket(getBiddingIDFromLocation(window.location), true);
+	};
+
+	const leaveBiddingHandler = () => {
+		if (webSocket) closeSocket(webSocket);
+
+		resetState();
+		navigate(Route.HOME);
 	};
 
 	return (
@@ -31,12 +41,11 @@ const Bidding: FC = () => {
 							Bidding progress: <span>Test bidding</span>
 						</h1>
 
-						{!isCreated && willBeCreated && (
+						{!isCreated && !willConnect && (
 							<Button callback={startBiddingHandler}>Begin</Button>
 						)}
-						{!willBeCreated && (
-							<Button callback={enterBiddingHandler}>Connect</Button>
-						)}
+						{willConnect && <Button callback={enterBiddingHandler}>Connect</Button>}
+						<Button callback={leaveBiddingHandler}>Leave</Button>
 
 						<p className={s.bidding__id}>
 							<span>Bidding ID: </span>

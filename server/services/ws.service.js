@@ -16,7 +16,9 @@ class WSService {
 	onStartedBidding(ws, body) {
 		const roomID = body.roomID;
 
-		if (store.rooms.filter((r) => r.id === roomID)[0]) {
+		const createdRoom = store.rooms.filter((r) => r.id === roomID)[0];
+
+		if (createdRoom) {
 			ws.send(
 				JSON.stringify({
 					message: "error",
@@ -30,6 +32,7 @@ class WSService {
 			id: roomID,
 			clients: [ws.id],
 		});
+
 		store.rooms[store.getRoomIndex(roomID)].timer = store.createTimer(roomID);
 
 		console.log(`Client started bidding:\t${roomID}\t|\tClient ID: ${ws.id}`);
@@ -39,7 +42,6 @@ class WSService {
 		ws.send(
 			JSON.stringify({
 				message: "started-bidding",
-				isCreated: true,
 				roomID,
 				clients: store.rooms.filter((r) => r.id === roomID)[0].clients,
 				timer: store.rooms.filter((r) => r.id === roomID)[0].timer,
@@ -52,16 +54,13 @@ class WSService {
 
 		const roomIndex = store.getRoomIndex(roomID);
 
-		console.log("Room Index:", roomIndex);
-
-		if (roomIndex > 0) {
+		if (roomIndex < 0) {
 			ws.send(
 				JSON.stringify({
 					message: "error",
 					content: "There is no room with matching ID",
 				}),
 			);
-			ws.close();
 			return;
 		}
 
@@ -82,30 +81,30 @@ class WSService {
 
 	onClientLeave(ws, body) {
 		const roomID = ws.room;
-
 		const roomIndex = store.getRoomIndex(roomID);
 
 		const currentClients = store.rooms[roomIndex].clients;
+		store.rooms[roomIndex].clients = currentClients.filter((cl) => cl !== ws.id);
 
-		store.rooms[roomIndex].clients = currentClients.filter(
-			(cl) => cl !== ws.id,
-		)[0];
-
-		if (!store.rooms[roomIndex]?.clients?.length) {
+		const clientsCount = store.rooms[roomIndex].clients.length;
+		if (!clientsCount) {
 			console.log(`No more clients in ${roomID} room, deleting...`);
 
-			const interval = store.intervals.filter((int) => int.roomID === roomID)[0];
-			clearInterval(interval.interval);
+			const roomInterval = store.intervals.filter(
+				(int) => int.roomID === roomID,
+			)[0];
+			clearInterval(roomInterval.interval);
 
 			store.intervals = store.intervals.filter((int) => int.roomID !== roomID);
 			store.rooms = store.rooms.filter((room) => roomID !== room.id);
 		} else {
-			if (
-				ws.id === store.rooms.filter((r) => r.id === roomID)[0].timer.currentClient
-			)
-				store.setNextClientToTimer(roomID);
+			const isLeavingClientOnTimer =
+				ws.id === store.rooms.filter((r) => r.id === roomID)[0].timer.currentClient;
+
+			if (isLeavingClientOnTimer) store.setNextClientToTimer(roomID);
 
 			this.updateClientsInRoom(store.rooms[roomIndex].clients);
+
 			this.updateTimer(
 				store.rooms[roomIndex].clients,
 				store.rooms[roomIndex].timer,
