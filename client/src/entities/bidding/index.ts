@@ -1,2 +1,2 @@
-export { biddingSlice, setIsCreated, setWillBeCreated } from "./model";
+export { biddingSlice } from "./model";
 export { useBiddingActions } from "./lib";

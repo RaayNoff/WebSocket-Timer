@@ -14,17 +14,20 @@ const Participant: FC<IParticipantProps> = memo(
 	({ timerCount, index, data }) => {
 		return (
 			<div className={s.participant}>
-				{timerCount && (
-					<div className={s.participant__timer}>
-						Time to move:<span>{timerCount}</span>
-					</div>
-				)}
+				<div
+					className={clsx(
+						s.participant__timer,
+						timerCount && s.participant__timer_active,
+					)}
+				>
+					Time to move:<span>{timerCount}</span>
+				</div>
 
-				<Client
-					data={data}
-					index={index}
-					className={clsx(s.participant__notactive)}
-				/>
+				{timerCount ? (
+					<Client data={data} index={index} isCurrent={Boolean(timerCount)} />
+				) : (
+					<Client data={data} index={index} />
+				)}
 			</div>
 		);
 	},

@@ -6,4 +6,8 @@ const getBiddingIDFromLocation = (location: Location) => {
 	return location.pathname.replace(`${Route.BIDDING}/`, "");
 };
 
-export { getBiddingIDFromLocation };
+const closeSocket = (ws: WebSocket) => {
+	ws.close();
+};
+
+export { getBiddingIDFromLocation, closeSocket };

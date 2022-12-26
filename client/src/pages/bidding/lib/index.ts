@@ -1,1 +1,1 @@
-export { getBiddingIDFromLocation } from "./helpers";
+export { getBiddingIDFromLocation, closeSocket } from "./helpers";
